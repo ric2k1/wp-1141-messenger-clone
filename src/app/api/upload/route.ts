@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer)
 
     // 上傳到 Cloudinary
-    const uploadResult = await new Promise((resolve, reject) => {
+    const uploadResult = await new Promise<{ secure_url: string; public_id: string }>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: isVideo ? 'video' : 'image',
@@ -67,12 +67,20 @@ export async function POST(request: NextRequest) {
           public_id: `${session.user.id}-${Date.now()}`,
         },
         (error, result) => {
-          if (error) reject(error)
-          else resolve(result)
+          if (error) {
+            reject(error)
+          } else if (!result) {
+            reject(new Error('Upload failed: No result returned'))
+          } else {
+            resolve({
+              secure_url: result.secure_url,
+              public_id: result.public_id,
+            })
+          }
         }
       )
       uploadStream.end(buffer)
-    }) as { secure_url: string; public_id: string }
+    })
 
     return NextResponse.json({
       url: uploadResult.secure_url,

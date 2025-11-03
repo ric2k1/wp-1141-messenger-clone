@@ -57,6 +57,7 @@ lerna-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+src/types/next-auth.d.ts
 
 # IDE - VSCode
 .vscode/*
