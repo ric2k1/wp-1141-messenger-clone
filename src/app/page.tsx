@@ -233,7 +233,7 @@ export default function Home() {
   }
 
   // Pusher 即時功能
-  const { triggerTyping } = usePusher({
+  const { triggerTyping, isConnected } = usePusher({
     conversationId: currentConversation?.id || null,
     currentUserId: session?.user?.id || '',
     onNewMessage: (message) => {
@@ -315,6 +315,28 @@ export default function Home() {
       }
     },
   })
+
+  // 定期重新載入訊息（僅在 Pusher 未連接時作為後備機制）
+  useEffect(() => {
+    if (!currentConversation?.id) return
+    
+    // 如果 Pusher 已連接，不進行輪詢（依賴即時推送）
+    if (isConnected) {
+      return
+    }
+
+    // Pusher 未連接時，每 5 秒輪詢一次
+    const pollInterval = 5000
+
+    const interval = setInterval(() => {
+      // 只在視窗可見時才輪詢
+      if (document.visibilityState === 'visible') {
+        loadConversation(currentConversation.id)
+      }
+    }, pollInterval)
+
+    return () => clearInterval(interval)
+  }, [currentConversation?.id, isConnected])
 
   const handleTyping = (isTyping: boolean) => {
     triggerTyping(isTyping)
