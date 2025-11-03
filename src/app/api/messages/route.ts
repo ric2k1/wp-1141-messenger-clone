@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { pusherServer } from '@/lib/pusher'
+import { triggerPusherEvent } from '@/lib/pusher'
 import { MessageType } from '@prisma/client'
 
 export const runtime = 'nodejs'
@@ -84,8 +84,8 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // 透過 Pusher 發送即時訊息
-    await pusherServer.trigger(
+    // 透過 Pusher 發送即時訊息（失敗不影響訊息建立）
+    await triggerPusherEvent(
       `private-conversation-${conversationId}`,
       'message:new',
       {
@@ -120,8 +120,20 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error sending message:', error)
+    
+    // 在開發環境中返回詳細錯誤訊息，生產環境中返回通用錯誤
+    const isDevelopment = process.env.NODE_ENV === 'development'
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        ...(isDevelopment && { 
+          details: errorMessage,
+          stack: errorStack 
+        })
+      },
       { status: 500 }
     )
   }

@@ -191,8 +191,13 @@ export default function Home() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
-        console.error(`發送訊息失敗 (${response.status}): ${errorData.error || response.statusText}`)
-        throw new Error(`Failed to send message: ${errorData.error || response.statusText}`)
+        const errorMessage = errorData.error || response.statusText
+        const errorDetails = errorData.details ? ` (${errorData.details})` : ''
+        console.error(`發送訊息失敗 (${response.status}): ${errorMessage}${errorDetails}`)
+        if (errorData.stack) {
+          console.error('錯誤堆疊:', errorData.stack)
+        }
+        throw new Error(`Failed to send message: ${errorMessage}${errorDetails}`)
       }
 
       const message = await response.json()

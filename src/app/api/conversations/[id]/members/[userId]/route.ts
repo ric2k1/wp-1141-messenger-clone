@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { removeMemberFromConversation } from '@/lib/conversation-utils'
-import { pusherServer } from '@/lib/pusher'
+import { triggerPusherEvent } from '@/lib/pusher'
 
 export const runtime = 'nodejs'
 
@@ -34,7 +34,7 @@ export async function DELETE(
 
     // 透過 Pusher 推送系統訊息
     if (result.systemMessage) {
-      await pusherServer.trigger(
+      await triggerPusherEvent(
         `private-conversation-${conversationId}`,
         'member:left',
         {

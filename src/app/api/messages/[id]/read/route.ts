@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { pusherServer } from '@/lib/pusher'
+import { triggerPusherEvent } from '@/lib/pusher'
 
 export const runtime = 'nodejs'
 
@@ -52,7 +52,7 @@ export async function PUT(
       })
 
       // 透過 Pusher 通知已讀
-      await pusherServer.trigger(
+      await triggerPusherEvent(
         `private-conversation-${message.conversationId}`,
         'message:read',
         {

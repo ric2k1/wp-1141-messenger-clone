@@ -29,6 +29,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // 檢查 Pusher 是否已配置
+    if (!pusherServer) {
+      return NextResponse.json(
+        { error: 'Pusher is not configured' },
+        { status: 503 }
+      )
+    }
+
     // 驗證使用者是否有權限訪問該頻道
     // 格式: private-conversation-{conversationId}
     if (channel_name.startsWith('private-conversation-')) {
