@@ -95,8 +95,8 @@ DATABASE_URL="mongodb+srv://your-username:your-password@cluster0.xxxxx.mongodb.n
    ```
 3. 如果將部署到生產環境，也添加生產環境的 URL：
    ```
-   https://your-domain.com/api/auth/callback/facebook
-   https://your-domain.com/api/auth/callback-setup
+   https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback/facebook
+   https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback-setup
    ```
 4. 點擊 "儲存變更"
 
@@ -157,7 +157,7 @@ FACEBOOK_CLIENT_SECRET="your-facebook-app-secret"
 如果將部署到生產環境，需要建立另一個 OAuth App 或更新 callback URL：
 
 ```
-https://your-domain.com/api/auth/callback/github
+https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback/github
 ```
 
 **環境變數設定：**
@@ -411,7 +411,7 @@ yarn dev
 2. **更新 NEXTAUTH_URL**
 
    ```env
-   NEXTAUTH_URL="https://your-domain.com"
+   NEXTAUTH_URL="https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app"
    ```
 
 3. **更新 OAuth 重新導向 URI**
