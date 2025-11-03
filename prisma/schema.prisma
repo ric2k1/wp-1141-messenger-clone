@@ -1,0 +1,109 @@
+// Prisma schema for Messenger Clone
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  alias        String   @unique
+  email        String?
+  name         String?
+  image        String?
+  provider     String   // facebook
+  oauthId      String
+  isAuthorized Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  sentMessages         Message[]         @relation("sender")
+  conversations        ConversationMember[]
+  createdConversations Conversation[]    @relation("creator")
+  
+  @@unique([provider, oauthId])
+}
+
+enum ConversationType {
+  DIRECT
+  GROUP
+}
+
+model Conversation {
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  type          ConversationType
+  creatorId     String             @db.ObjectId
+  members       ConversationMember[]
+  messages      Message[]
+  systemMessages SystemMessage[]
+  lastMessageAt DateTime           @default(now())
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  
+  creator User @relation("creator", fields: [creatorId], references: [id], onDelete: Cascade)
+  
+  @@index([lastMessageAt])
+  @@index([type])
+}
+
+model ConversationMember {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId String       @db.ObjectId
+  userId        String       @db.ObjectId
+  joinedAt      DateTime     @default(now())
+  leftAt        DateTime?
+  
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@index([conversationId])
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+}
+
+model Message {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  content        String
+  type           MessageType  @default(TEXT)
+  senderId       String       @db.ObjectId
+  conversationId String       @db.ObjectId
+  fileUrl        String?
+  isRead         Boolean      @default(false)
+  readBy         String[]     // Array of user IDs who have read this message
+  createdAt      DateTime     @default(now())
+  
+  sender       User         @relation("sender", fields: [senderId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+}
+
+enum SystemMessageType {
+  USER_JOINED
+  USER_LEFT
+}
+
+model SystemMessage {
+  id             String             @id @default(auto()) @map("_id") @db.ObjectId
+  type           SystemMessageType
+  conversationId String             @db.ObjectId
+  userId         String?            @db.ObjectId // User who joined/left, null if system action
+  content        String             // e.g., "xxx 已加入群聊" or "xxx 已離開群聊"
+  createdAt      DateTime           @default(now())
+  
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  @@index([conversationId, createdAt])
+}
+

@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #37352F;
+  --notion-gray: #FFFFFF;
+  --notion-gray-light: #F7F6F3;
+  --notion-gray-border: #E9E9E7;
+  --notion-gray-hover: #F1F1EF;
+  --notion-text: #37352F;
+  --notion-text-secondary: #787774;
+  --notion-text-tertiary: #9B9A97;
+  --notion-blue: #2383E2;
+  --notion-blue-hover: #1E73C9;
+  --notion-shadow: rgba(15, 15, 15, 0.03);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #191919;
+    --foreground: #EDEDED;
+    --notion-gray: #191919;
+    --notion-gray-light: #1F1F1F;
+    --notion-gray-border: #2E2E2E;
+    --notion-gray-hover: #232323;
+    --notion-text: #EDEDED;
+    --notion-text-secondary: #A6A6A6;
+    --notion-text-tertiary: #787774;
+    --notion-blue: #3B8EFF;
+    --notion-blue-hover: #2B7FE6;
+    --notion-shadow: rgba(0, 0, 0, 0.3);
+  }
+}
+
+body {
+  color: var(--notion-text);
+  background: var(--notion-gray);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
