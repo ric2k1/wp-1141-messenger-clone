@@ -397,6 +397,40 @@ yarn dev
 - 檢查 Cloudinary 帳號是否啟用
 - 確認上傳的檔案大小未超過限制
 
+### Q: 生產環境登入時跳轉到 localhost:3000/auth/error?error=Configuration
+
+**A:**
+
+這是因為 `NEXTAUTH_URL` 環境變數在生產環境中設定錯誤。NextAuth 使用 `NEXTAUTH_URL` 來決定回調 URL，如果設定為 `http://localhost:3000`，會導致所有重定向都指向 localhost。
+
+**解決方法：**
+
+1. **在 Vercel Dashboard 中更新環境變數**
+
+   - 前往 Vercel Dashboard → 您的專案 → Settings → Environment Variables
+   - 找到 `NEXTAUTH_URL` 環境變數
+   - 更新為您的生產環境 URL（如 `https://your-app-name.vercel.app`）
+   - **重要：** 確保 URL 以 `https://` 開頭，且不包含尾隨斜線
+
+2. **重新部署應用**
+
+   ```bash
+   vercel --prod
+   ```
+
+   或在 Vercel Dashboard 中觸發新的部署
+
+3. **確認環境變數已正確設定**
+
+   - 檢查 Production 環境的 `NEXTAUTH_URL` 是否為生產環境 URL
+   - 確認 Preview 和 Development 環境的 `NEXTAUTH_URL` 分別設定為對應的 URL（如需）
+
+4. **同時確認 OAuth 重新導向 URI**
+   - Facebook 和 GitHub OAuth App 的回調 URL 也應該包含生產環境 URL
+   - 參考「10. 生產環境設定」章節中的說明
+
+**注意：** 環境變數變更後，必須重新部署應用才會生效。
+
 ---
 
 ## 10. 生產環境設定
