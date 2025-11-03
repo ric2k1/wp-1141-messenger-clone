@@ -95,8 +95,10 @@ DATABASE_URL="mongodb+srv://your-username:your-password@cluster0.xxxxx.mongodb.n
    ```
 3. 如果將部署到生產環境，也添加生產環境的 URL：
    ```
-   https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback/facebook
-   https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback-setup
+   // https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback/facebook
+   https://messenger-clone-iota.vercel.app/api/auth/callback/facebook
+   // https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback-setup
+   https://messenger-clone-iota.vercel.app/api/auth/callback-setup
    ```
 4. 點擊 "儲存變更"
 
@@ -157,7 +159,7 @@ FACEBOOK_CLIENT_SECRET="your-facebook-app-secret"
 如果將部署到生產環境，需要建立另一個 OAuth App 或更新 callback URL：
 
 ```
-https://messenger-clone-8vf6elus9-ric2k1s-projects.vercel.app/api/auth/callback/github
+https://messenger-clone-iota.vercel.app/api/auth/callback/github
 ```
 
 **環境變數設定：**

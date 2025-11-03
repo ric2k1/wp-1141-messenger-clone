@@ -8,6 +8,14 @@ function ErrorContent() {
   const error = searchParams.get('error')
 
   const errorMessages: { [key: string]: string } = {
+    Configuration: 'OAuth 配置錯誤。請確認 NEXTAUTH_URL 環境變數已正確設定為生產環境 URL（而非 localhost:3000）。',
+    AccessDenied: '存取被拒絕。您可能尚未在系統中註冊。',
+    Verification: 'OAuth 驗證失敗，請重試。',
+    Signin: '登入失敗，請重試。',
+    OAuthSignin: 'OAuth 登入錯誤，請重試。',
+    OAuthCallback: 'OAuth 回調錯誤，請重試。',
+    OAuthCreateAccount: '無法建立 OAuth 帳號。',
+    OAuthAccountNotLinked: 'OAuth 帳號未連結。',
     MissingAlias: '缺少用戶名參數',
     NoSession: '沒有找到 OAuth 會話',
     UserNotFound: '找不到用戶',
