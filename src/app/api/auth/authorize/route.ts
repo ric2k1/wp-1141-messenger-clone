@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Generate OAuth authorization URL using custom auth start page
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://example.com:3000'
     const callbackUrl = `${baseUrl}/api/auth/callback-setup?alias=${encodeURIComponent(alias)}`
     const authUrl = `${baseUrl}/auth/start?provider=${provider}&callbackUrl=${encodeURIComponent(callbackUrl)}`
 

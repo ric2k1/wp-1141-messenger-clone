@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Start OAuth flow
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://example.com:3000'
     const callbackUrl = `${baseUrl}/api/auth/callback/${user.provider}`
     
     // Return redirect URL for client-side navigation
